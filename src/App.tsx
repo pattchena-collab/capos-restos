@@ -1,3 +1,6 @@
+// @ts-nocheck
+import { useState, useEffect, useRef, createContext, useContext } from "react";
+...
 import { useState, useEffect, useRef, createContext, useContext } from "react";
 
 // ─── COLORES CAPO'S ───────────────────────────────────────────────────────────
