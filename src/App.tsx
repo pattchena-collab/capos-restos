@@ -1,7 +1,5 @@
 // @ts-nocheck
 import { useState, useEffect, useRef, createContext, useContext } from "react";
-...
-import { useState, useEffect, useRef, createContext, useContext } from "react";
 
 // ─── COLORES CAPO'S ───────────────────────────────────────────────────────────
 const BRAND = { red: "#c8391a", gold: "#e8a030" };
