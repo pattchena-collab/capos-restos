@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect, useRef, createContext, useContext } from "react";
 
 // ─── COLORES CAPO'S ───────────────────────────────────────────────────────────
@@ -1374,31 +1373,36 @@ function SalonScreen({ state, currentUser, can }) {
 
   return (
     <div style={{ height:"100vh", display:"flex", flexDirection:"column", background:C.bg }}>
-      {/* Top bar */}
-      <div style={{ background:C.surface, borderBottom:`1px solid ${C.border}`,
-        padding:"0 16px", display:"flex", alignItems:"center", flexShrink:0 }}>
-        <div style={{ marginRight:20, padding:"8px 0" }}><CaposLogo /></div>
-        {[["salon","🪑 Salón"],["delivery","🛵 Delivery"],["reportes","📊 Reportes"]].map(([v,l]) => (
-          <button key={v} onClick={() => setTab(v)} style={{ padding:"16px 14px", background:"none",
-            border:"none", borderBottom:`2px solid ${tab===v?C.accent:"transparent"}`,
-            color:tab===v?C.accent:C.soft, cursor:"pointer", fontWeight:600, fontSize:13, whiteSpace:"nowrap" }}>{l}</button>
-        ))}
-        <div style={{ flex:1 }} />
-        {draftAll>0   && <div style={{ display:"flex", alignItems:"center", gap:5, marginRight:12 }}>
-          <span style={{ width:7, height:7, borderRadius:"50%", background:C.blue, display:"block", animation:"blink 1.4s infinite" }} />
-          <span style={{ fontSize:12, color:C.blue, fontWeight:600 }}>{draftAll} sin enviar</span>
-        </div>}
-        {cookingAll>0 && <div style={{ display:"flex", alignItems:"center", gap:5, marginRight:12 }}>
-          <span style={{ width:7, height:7, borderRadius:"50%", background:C.gold, display:"block", animation:"blink 1.4s infinite" }} />
-          <span style={{ fontSize:12, color:C.gold, fontWeight:600 }}>{cookingAll} en cocina</span>
-        </div>}
-        {readyAll>0 && <span style={{ fontSize:12, color:C.green, fontWeight:600, marginRight:12 }}>✓ {readyAll} listas</span>}
-        <div style={{ display:"flex", gap:8, padding:"8px 0", marginRight:220 }}>
+      {/* Top bar — fila 1: logo + nav + usuario */}
+      <div style={{ background:C.surface, borderBottom:`1px solid ${C.border}`, flexShrink:0 }}>
+        <div style={{ padding:"0 16px", display:"flex", alignItems:"center", height:48 }}>
+          <div style={{ marginRight:20 }}><CaposLogo /></div>
+          {[["salon","🪑 Salón"],["delivery","🛵 Delivery"],["reportes","📊 Reportes"]].map(([v,l]) => (
+            <button key={v} onClick={() => setTab(v)} style={{ padding:"0 14px", height:48, background:"none",
+              border:"none", borderBottom:`2px solid ${tab===v?C.accent:"transparent"}`,
+              color:tab===v?C.accent:C.soft, cursor:"pointer", fontWeight:600, fontSize:13, whiteSpace:"nowrap" }}>{l}</button>
+          ))}
+          <div style={{ flex:1 }} />
+          {/* Alertas de operación */}
+          {draftAll>0 && <div style={{ display:"flex", alignItems:"center", gap:4, marginRight:10 }}>
+            <span style={{ width:6, height:6, borderRadius:"50%", background:C.blue, display:"block", animation:"blink 1.4s infinite" }} />
+            <span style={{ fontSize:11, color:C.blue, fontWeight:600 }}>{draftAll} sin enviar</span>
+          </div>}
+          {cookingAll>0 && <div style={{ display:"flex", alignItems:"center", gap:4, marginRight:10 }}>
+            <span style={{ width:6, height:6, borderRadius:"50%", background:C.gold, display:"block", animation:"blink 1.4s infinite" }} />
+            <span style={{ fontSize:11, color:C.gold, fontWeight:600 }}>{cookingAll} cocina</span>
+          </div>}
+          {readyAll>0 && <span style={{ fontSize:11, color:C.green, fontWeight:600, marginRight:10 }}>✓ {readyAll} listas</span>}
+          <ThemeToggle />
+          <UserBadge user={currentUser} onLogout={() => {}} />
+        </div>
+        {/* Fila 2: acciones */}
+        <div style={{ padding:"6px 16px", borderTop:`1px solid ${C.border}`, display:"flex", gap:8, alignItems:"center", background:C.bg }}>
           {can.config && <Btn size="sm" color={C.accent} onClick={() => setShowMenu(true)}>🍽 Menú</Btn>}
           {can.config && (
-            <button onClick={() => setShowInventario(true)} style={{ display:"flex", alignItems:"center", gap:5,
-              padding:"5px 11px", borderRadius:8, border:`1.5px solid ${stockCrit>0?C.red+"55":C.border}`,
-              background:stockCrit>0?C.redBg:C.surface, color:stockCrit>0?C.red:C.soft,
+            <button onClick={() => setShowInventario(true)} style={{ display:"flex", alignItems:"center", gap:4,
+              padding:"4px 10px", borderRadius:7, border:`1.5px solid ${stockCrit>0?C.red+"55":C.border}`,
+              background:stockCrit>0?C.redBg:"transparent", color:stockCrit>0?C.red:C.soft,
               cursor:"pointer", fontSize:12, fontWeight:700 }}>
               📦 {stockCrit>0?`⚠ ${stockCrit} bajo stock`:"Inventario"}
             </button>
@@ -1593,17 +1597,12 @@ export default function App() {
       <style>{css}</style>
       <div style={{ background:C.bg, color:C.text, height:"100vh", overflow:"hidden" }}>
 
-        {/* Toggle día/noche — siempre visible */}
-        <div style={{ position:"fixed", top:10, right:12, zIndex:600, display:"flex", gap:8, alignItems:"center" }}>
-          <ThemeToggle />
-          {user && can.config && stockAlert>0 && (
-            <span style={{ background:C.red+"22", color:C.red, border:`1px solid ${C.red}44`,
-              borderRadius:99, padding:"4px 10px", fontSize:12, fontWeight:700, animation:"blink 2s infinite" }}>
-              📦 {stockAlert} bajo stock
-            </span>
-          )}
-          {user && <UserBadge user={user} onLogout={logout} />}
-        </div>
+        {/* Toggle día/noche — visible solo en login */}
+        {!user && (
+          <div style={{ position:"fixed", top:10, right:12, zIndex:600 }}>
+            <ThemeToggle />
+          </div>
+        )}
 
         {/* Selector pantallas — solo admin/roles con ambas */}
         {user && can.salon && can.cocina && (
