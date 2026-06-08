@@ -1393,7 +1393,7 @@ function SalonScreen({ state, currentUser, can }) {
           <span style={{ fontSize:12, color:C.gold, fontWeight:600 }}>{cookingAll} en cocina</span>
         </div>}
         {readyAll>0 && <span style={{ fontSize:12, color:C.green, fontWeight:600, marginRight:12 }}>✓ {readyAll} listas</span>}
-        <div style={{ display:"flex", gap:8, padding:"8px 0", marginRight:100 }}>
+        <div style={{ display:"flex", gap:8, padding:"8px 0", marginRight:220 }}>
           {can.config && <Btn size="sm" color={C.accent} onClick={() => setShowMenu(true)}>🍽 Menú</Btn>}
           {can.config && (
             <button onClick={() => setShowInventario(true)} style={{ display:"flex", alignItems:"center", gap:5,
